@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <link rel="stylesheet" href="./assets/index.css">
+    <title>FACT Sales Tax Calculator</title>
+
+    <div class="logo-wrapper" style="text-align:center">
+        <a href="https://fntc.ca/">
+		<img src="fntcLogo.png" alt="First Nations Tax Commission" width="700" height="200"  >
+		</a>
+</head>
+
+
+
+<body>
+    <div id="app">
+        <div id="Cal_Main_container">
+            <div id="intro">
+                <h1>FACT Sales Tax Calculator</h1>
+                <p> This FACT sales tax estimate is an approximation only based on average sales for each FACT product. </p>
+            </div>
+            <div id="calculationArea">
+
+                <div class="form-group" >
+                    <label for="fuelStation">What is the Number of Fuel Stations on Reserve?</label>
+
+                    <select class="normalinput" name="fuel" id="fuel" onchange="generateFuel('fuel'); total('fuel' , 'alcohol' , 'cannabis' , 'tobacco' ); ">
+                        <option data-price="NULL" value="None">Select Number</option>
+                        <option data-price="0" value="0">0</option>
+                        <option data-price="1" value="1">1</option>
+                        <option data-price="2" value="2">2</option>
+                        <option data-price="3" value="3">3</option>
+                        <option data-price="4" value="4">4</option>
+                        <option data-price="5" value="5">5</option>
+                        <option data-price="6" value="6">6</option>
+                        <option data-price="7" value="7">7</option>
+                        <option data-price="8" value="8">8</option>
+                        <option data-price="9" value="9">9</option>
+                        <option data-price="10" value="10">10</option>
+                      </select>
+                    
+
+                </div>
+
+                <div class="form-group" >
+                    <label for="alcohol">What is the Number of  Beer and Wine Stores on Reserve ?</label>
+                    <select class="normalinput" name="alcohol" id="alcohol" onchange="generateAlco('alcohol') , total('fuel' , 'alcohol' , 'cannabis' ,'tobacco');">
+                        <option data-price="NULL" value="None">Select Number</option>
+                        <option data-price="0" value="0">0</option>
+                        <option data-price="1" value="1">1</option>
+                        <option data-price="2" value="2">2</option>
+                        <option data-price="3" value="3">3</option>
+                        <option data-price="4" value="4">4</option>
+                        <option data-price="5" value="5">5</option>
+                        <option data-price="6" value="6">6</option>
+                        <option data-price="7" value="7">7</option>
+                        <option data-price="8" value="8">8</option>
+                        <option data-price="9" value="9">9</option>
+                        <option data-price="10" value="10">10</option>
+                      </select>
+
+                </div>
+
+                <div class="form-group" >
+                    <label for="cannabis">What is the Number of Cannabis Stores on Reserve ?</label>
+
+                    <select class="normalinput" name="cannabis" id="cannabis" onchange="generateCan('cannabis') ,  total('fuel' , 'alcohol' , 'cannabis', 'tobacco');">
+                        <option data-price="NULL" value="None">Select Number</option>
+                        <option data-price="0" value="0">0</option>
+                        <option data-price="1" value="1">1</option>
+                        <option data-price="2" value="2">2</option>
+                        <option data-price="3" value="3">3</option>
+                        <option data-price="4" value="4">4</option>
+                        <option data-price="5" value="5">5</option>
+                        <option data-price="6" value="6">6</option>
+                        <option data-price="7" value="7">7</option>
+                        <option data-price="8" value="8">8</option>
+                        <option data-price="9" value="9">9</option>
+                        <option data-price="10" value="10">10</option>
+                      </select>
+                </div>
+            
+                <div class="form-group" >
+
+                    <label for="tobacco">Do you have Tobacco Sales on Reserve ?</label>
+                
+                    <select class="normalinput" name="tobacco" id="tobacco" onchange="generateTob('tobacco') , total('fuel' , 'alcohol' , 'cannabis', 'tobacco', 'tobacco');">
+                        <option data-price="NULL" value="None">Select Option</option>
+                        <option data-price="0" value="0">No</option>
+                        <option data-price="1" value="1">Yes</option>
+                      </select>
+
+
+                </div>
+            </div>
+
+
+
+
+
+            <div id="app">
+             
+                    <div id="intro">
+                        <div id="calculationArea">
+          
+               
+                
+                    <div class="form-group" ></div>
+                    <h2> <u>Estimate of FACT Sales Tax Result </u></h2>
+                
+                
+                <div v-if="showSummary" class="mgInvoice">
+                   
+                    <div class="">
+                        <p>  <u>  <h2> Total Low Range :  </h2> </u> </p>
+                        
+                        <p>   <u> <h2> Total High Range: </h2>  </u></p>
+                    </div>
+                    
+                    <div class="invVal">
+                        
+                        <p class="low"> <h1> $  <output type="number"  name="lowTotal" id="lowTotal"  > </h1></p>
+                        <p class="high"> <h1>  $ <output type="number" name="highTotal" id="highTotal"> </h1> </p>
+                    </div>
+                    
+                </div>
+
+                <legend> <h3>Detailed Result   </h3> </legend>
+
+
+                
+                        <div class="invVal">
+                        <div class="form-group" >
+                            <h4 align="left" > <u>Fuel Stations:</u></h4>
+                            <p class="lowfuel"> Low Range:          <output type="number" name="lowfuel" id="lowfuel"> </p>
+                            <p class="highfuel"> High Range:        <output type="number" name="highfuel" id="highfuel"></p>
+                        </div></div>
+
+
+
+                        <div class="invVal">
+                            <div class="form-group" >
+                                <h4 align="left"> <u>Alcohol:</u></h4>
+                                <p class="low"> Low Range :  <output type="number" name="lowAlcohol" id="lowAlcohol"></p>
+                                <p class="high"> High Range:  <output type="number" name="highAlcohol" id="highAlcohol"></p>
+
+
+                                
+                            </div></div>
+    
+
+
+                            <div class="invVal">
+                                <div class="form-group" >
+                                    <h4 align="left"><u>Cannabis:</u></h4>
+                                  
+                                    <p class="low"> Low Range :  <output type="number" name="lowcannabis" id="lowcannabis"></p>
+                                    <p class="high"> High Range:  <output type="number" name="highcannabis" id="highcannabis"></p>
+                                </div></div>
+                                
+                                
+                                <div class="invVal">
+                                    <div class="form-group" >
+                                        <h4 align="left"><u>Tobaaco:</u></h4>
+                                        <p class="low"> Low Range :  <output type="number" name="lowtobacco" id="lowtobacco"></p>
+                                        <p class="high"> High Range:  <output type="number" name="hightobacco" id="hightobacco"></p>
+                                    </div></div>
+
+                    <br>
+
+
+                    <div class="disclaimer">
+                        <p>Note : Actual First Nation FACT sales tax revenues will depend on the actual sales and prices of FACT products in First Nations. If you are interested in a detailed FACT sales tax estimate.</p>
+                    </div>      
+
+                
+
+
+                <div id="mgNote"><br>
+                    <h4>Please Contact : </h4>
+                    <h3>FIRST NATIONS TAX COMMISSION</h3>
+<address>
+Email: <a href="mailto:xxx@fntc.com"> email </a> <br> 
+Visit us at:<a href=www.fntc.com></a> fntc.ca
+<br>
+321-345 Chief Alex Thomas Way
+Kamloops BC V2H 1H1 <br>
+Tel: +1 250-828-9857 | Fax: +1 250-828-9858
+</address>
+                </div>
+             
+            </div>
+
+           
+
+
+
+            <div></div>
+
+            </div>
+        </div>
+        <script type="text/javascript">
+
+
+            total('fuel' , 'alcohol' , 'cannabis' ,'tobacco' );
+            
+            function total(fuelId , alcoholId , cannabisId , tobaccoId ) {
+
+              var fuelSelect = document.getElementById(fuelId); // Select dropdown
+              var alcoholSelect = document.getElementById(alcoholId); // Select dropdown
+              var cannabisSelect = document.getElementById(cannabisId); // Select dropdown
+              var tobaccoSelect = document.getElementById(tobaccoId); // Select dropdown
+
+
+              let selectedOption = fuelSelect.options[fuelSelect.selectedIndex]; 
+              let selectedOption1 = alcoholSelect.options[alcoholSelect.selectedIndex];
+              let selectedOption2 = cannabisSelect.options[cannabisSelect.selectedIndex];
+              let selectedOption3 = tobaccoSelect.options[tobaccoSelect.selectedIndex];
+
+              var selectedfuelValue = +selectedOption.dataset.price;
+              var selectedalcoholValue = +selectedOption1.dataset.price;
+              var selectedcannabisValue = +selectedOption2.dataset.price;
+              var selectedtobaccoValue = +selectedOption3.dataset.price;
+
+
+
+              var lowtotal = ( Math.round ((selectedfuelValue*0.85*98400)+ (selectedalcoholValue*0.85*43900) + (selectedcannabisValue*0.85*61812) + (selectedtobaccoValue*0.85*43000)));
+              document.getElementById("lowTotal").value = lowtotal.toLocaleString();
+
+
+
+              var hightotal = ( Math.round ((selectedfuelValue*1.15*98400)+ (selectedalcoholValue*1.15*43900) + (selectedcannabisValue*1.15*61812) + (selectedtobaccoValue*1.15*43000)));
+              document.getElementById("highTotal").value = hightotal.toLocaleString();
+            }
+
+
+
+
+
+              generateFuel('fuel');
+            
+              function generateFuel(fuelId) {
+                var fuelSelect = document.getElementById(fuelId); // Select dropdown
+
+                let selectedOption = fuelSelect.options[fuelSelect.selectedIndex]; 
+              
+                var selectedfuelValue = +selectedOption.dataset.price;
+
+                var lowfuel = ( Math.round(selectedfuelValue*0.85*98400));
+                document.getElementById("lowfuel").value = lowfuel.toLocaleString();
+
+
+                var highfuel = ( Math.round(selectedfuelValue*1.15*98400));
+                document.getElementById("highfuel").value = highfuel.toLocaleString();
+              }
+
+              generateAlco('alcohol');
+            
+              function generateAlco(alcoholId) {
+                var alcoholSelect = document.getElementById(alcoholId); // Select dropdown
+
+                let selectedOption = alcoholSelect.options[alcoholSelect.selectedIndex]; 
+              
+                var selectedalcoholValue = +selectedOption.dataset.price;
+
+                var lowAlco = ( Math.round(selectedalcoholValue*0.85*43900));
+                document.getElementById("lowAlcohol").value = lowAlco.toLocaleString();
+
+
+                var highalco = ( Math.round(selectedalcoholValue*1.15*43900));
+                document.getElementById("highAlcohol").value = highalco.toLocaleString();
+              }
+
+              generateCan('cannabis');
+            
+            function generateCan(cannabisId) {
+              var cannabisSelect = document.getElementById(cannabisId); // Select dropdown
+
+              let selectedOption = cannabisSelect.options[cannabisSelect.selectedIndex]; 
+            
+              var selectedcannabisValue = +selectedOption.dataset.price;
+
+              var lowCan = ( Math.round(selectedcannabisValue*0.85*61812));
+              document.getElementById("lowcannabis").value = lowCan.toLocaleString();
+
+
+              var highCan = ( Math.round(selectedcannabisValue*1.15*61812));
+              document.getElementById("highcannabis").value = highCan.toLocaleString();
+            
+            }
+
+            generateTob('tobacco');
+          
+          function generateTob(tobaccoId) {
+            var tobaccoSelect = document.getElementById(tobaccoId); // Select dropdown
+
+            let selectedOption = tobaccoSelect.options[tobaccoSelect.selectedIndex]; 
+          
+            var selectedtobaccoValue = +selectedOption.dataset.price;
+
+            var lowCan = ( Math.round(selectedtobaccoValue*0.85*43000));
+            document.getElementById("lowtobacco").value = lowCan.toLocaleString();
+
+
+            var highTob = ( Math.round(selectedtobaccoValue*1.15*43000));
+            document.getElementById("hightobacco").value = highTob.toLocaleString();
+                    
+          }
+
+            </script>
+        <script src="./assets/index.js"></script>
+    </div>
+</body>
+
+</html>
